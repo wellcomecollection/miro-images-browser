@@ -1,0 +1,114 @@
+<title>Miro images browser</title>
+
+<style>
+  body {
+    font-size: 120%;
+    max-width: 850px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  form {
+    background: #cceaff;
+    padding: 0.5em;
+    border: 3px solid #3af;
+  }
+
+  th {
+    text-align: left;
+    font-size: 120%;
+    padding-top: 5px;
+  }
+
+  th a {
+    color: #005694;
+  }
+
+  label {
+    font-size: 120%;
+  }
+
+  td.license {
+    width: 70px;
+  }
+
+  td {
+    padding: 3px;
+  }
+</style>
+
+<form>
+  <script>
+    function executeSearch(page) {
+      var license = document.getElementById("license").value;
+      var dateFrom = document.getElementById("dateFrom").value;
+      var dateTo = document.getElementById("dateTo").value;
+      var query = document.getElementById("query").value;
+
+      document.location = "?license=" + license + "&dateFrom=" + dateFrom + "&dateTo=" + dateTo + "&page=" + page + "&query=" + query;
+    }
+  </script>
+
+  <table>
+    <tr>
+      <td><label for="license">license</label></td>
+      <td>
+        <select name="license" id="license" value="{{license}}">
+          <option value="">(choose)</option>
+          <option {% if license == 'cc-0' %}selected{% endif %} value="cc-0">CC 0</option>
+          <option {% if license == 'cc-by' %}selected{% endif %} value="cc-by">CC BY</option>
+          <option {% if license == 'cc-by-nc' %}selected{% endif %} value="cc-by-nc">CC BY NC</option>
+          <option {% if license == 'cc-by-nc-nd' %}selected{% endif %} value="cc-by-nc-nd">CC BY NonCommercial NoDerivatives</option>
+          <option {% if license == 'cc-by-nc-sa' %}selected{% endif %} value="cc-by-nc-sa">CC BY NonCommercial ShareAlike</option>
+          <option {% if license == 'cc-by-nd' %}selected{% endif %} value="cc-by-nd">CC BY NoDerivatives</option>
+          <option {% if license == 'cc-by-sa' %}selected{% endif %} value="cc-by-sa">CC BY ShareAlike</option>
+          <option {% if license == 'inc' %}selected{% endif %} value="inc">In Copyright</option>
+          <option {% if license == 'ogl' %}selected{% endif %} value="ogl">Open Government Licence</option>
+          <option {% if license == 'opl' %}selected{% endif %} value="opl">Open Parliament Licence</option>
+          <option {% if license == 'pdm' %}selected{% endif %} value="pdm">PDM</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td><label for="dateFrom">date from</label></td>
+      <td><input name="dateFrom" id="dateFrom" value="{{dateFrom}}"></input></td>
+    </tr>
+    <tr>
+      <td><label for="dateTo">date to</label></td>
+      <td><input name="dateTo" id="dateTo" value="{{dateTo}}"></input></td>
+    </tr>
+    <tr>
+      <td><label for="query">query</label></td>
+      <td><input name="query" id="query" value="{{query}}"></input></td>
+    </tr>
+    <tr>
+      <td></td>
+      <th><a href="#" onclick="executeSearch(1);">Search!</a></th>
+    </tr>
+  </table>
+</form>
+
+<h2>{{ resp.totalResults }} match{% if resp.totalResults != 1 %}es{% endif %}, page {{ page }}
+  ({% if page > 1 %}<a href="#" onclick="executeSearch({{ page - 1}})">{% endif %}&larr; prev</a> / <a href="#" onclick="executeSearch({{ page + 1}})">next &rarr;</a>)</h2>
+
+<p><a href="{{ api_url }}">(URL to results in the catalogue API)</a></p>
+
+{% if resp.results %}
+  <table>
+    {% for work in resp.results %}
+    <tr>
+      <td><img src="{{ work.thumbnail.url }}"></td>
+      <td><a href="https://wellcomecollection.org/works/{{ work.id }}">{{ work.id }}</a></td>
+      <td>
+      <td>{{ work | miro_id }}</td>
+      <td class="license">{{ work | license }}</td>
+      <td>{{ work.title }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+
+  <h2>{{ resp.totalResults }} match{% if resp.totalResults != 1 %}es{% endif %}, page {{ page }}
+    ({% if page > 1 %}<a href="#" onclick="executeSearch({{ page - 1}})">{% endif %}&larr; prev</a> / <a href="#" onclick="executeSearch({{ page + 1}})">next &rarr;</a>)</h2>
+{% else %}
+  <p>(no results)</p>
+{% endif %}
