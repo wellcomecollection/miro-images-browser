@@ -47,7 +47,7 @@ def index():
     resp = httpx.get("https://api.wellcomecollection.org/catalogue/v2/works", params=params)
     resp.raise_for_status()
 
-    return render_template("index.html", resp=resp.json(), license=license, dateTo=dateTo, dateFrom=dateFrom, api_url=resp.url, page=page)
+    return render_template("index.html", resp=resp.json(), license=license, dateTo=dateTo, dateFrom=dateFrom, api_url=resp.url, page=page, query=query)
 
 
 if __name__ == '__main__':
