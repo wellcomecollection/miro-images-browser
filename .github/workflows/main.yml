@@ -1,6 +1,6 @@
 on:
   push:
-    branches: [ live ]
+    branches: [ main ]
 jobs:
   repo-sync:
     runs-on: ubuntu-latest
