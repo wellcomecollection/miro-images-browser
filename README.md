@@ -1,6 +1,6 @@
 # miro-images-browser
 
-The Miro image browser presents a Miro-focused view on the image data in the [Catalogue API](https://developers.wellcomecollection.org/catalogue).
+The Miro image browser presents a Miro-centric view of the image data in the [Catalogue API](https://developers.wellcomecollection.org/catalogue).
 It's designed for staff who work with the Miro image data specifically, rather than to be a general-purpose image search.
 If you don't know what Miro is, you probably want a different tool.
 
